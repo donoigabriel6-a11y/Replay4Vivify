@@ -1,5 +1,4 @@
 # Replay4Vivify
-<<<<<<< HEAD
 
 Watch back your best scores with vivify support!
 
