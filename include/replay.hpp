@@ -66,6 +66,7 @@ namespace Replay {
             short colorType;
             short cutDirection;
             Type eventType = Type::GOOD;
+            bool vivifyQuest = false;
         };
 
         struct Note {
