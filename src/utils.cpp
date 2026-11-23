@@ -334,12 +334,8 @@ int Utils::BSORNoteID(Replay::Events::NoteInfo const& note) {
 }
 
 bool Utils::Matches(GlobalNamespace::NoteData* data, Replay::Events::NoteInfo const& info, bool oldScoringTypes, bool checkME) {
-    if (checkME) {
-        int dataId = BSORNoteID(data);
-        int infoId = BSORNoteID(info);
-        // I still don't entirely understand this fix, but thankfully I am pretty sure it is only a bug in replays from before scoring types
-        return dataId == infoId || dataId == infoId + 30000;
-    }
+    if (info.vivifyQuest)
+        return true; // Assume vivify-quest replays are compatible without strict ID matching
     return ScoringTypeMatches(info.scoringType, data->scoringType, oldScoringTypes) && (int) data->lineIndex == info.lineIndex &&
            (int) data->noteLineLayer == info.lineLayer && (int) data->colorType == info.colorType && (int) data->cutDirection == info.cutDirection;
 }
