@@ -1,4 +1,5 @@
 # Replay4Vivify
+<<<<<<< HEAD
 
 Watch back your best scores with vivify support!
 
@@ -25,3 +26,6 @@ Watch back your best scores with vivify support!
 [Fern](https://github.com/Fernthedev) for the original version of Hollywood, the renderer
 
 [Sc2ad](https://github.com/Sc2ad) and the rest of the Quest modding people
+=======
+Replay Mod made to work with trail-b1az3r vivify!
+>>>>>>> 71fcda085a03203a2077832e6836e669d75f2176
