@@ -1,11 +1,10 @@
 # Replay4Vivify
-<<<<<<< HEAD
 
 Watch back your best scores with vivify support!
 
 ## FAQ (Frequently Asked Questions)
 - Does the mod come with Vivify?
-  - No the mod does not come with vivify, you have to get a port of it I recommend this port [VivifyPort](https://github.com/trail-b1az3r/vivify-quest)
+  - No the mod does not come with vivify, you have to get a port of it I recommend this port [Vivify-Quest](https://github.com/trail-b1az3r/vivify-quest)
 
 
 
