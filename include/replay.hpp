@@ -164,6 +164,7 @@ namespace Replay {
         bool hasYOffset = false;
         std::optional<std::string> playerName;
         bool playerOk = false;  // if the player that set the replay is logged in
+        bool vivifyQuest = false; // Marker for vivify-quest replays
 
         Quaternion averageOffset;  // inverse of the average difference from looking forward
 
