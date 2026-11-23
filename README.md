@@ -4,6 +4,10 @@
 Watch back your best scores with vivify support!
 
 ## FAQ (Frequently Asked Questions)
+- Does the mod come with Vivify?
+  - No the mod does not come with vivify, you have to get a port of it I recommend this port [VivifyPort](https://github.com/trail-b1az3r/vivify-quest)
+
+
 
 - How do I record a replay?
   - For now, the only way to record replays is with [BeatLeader](https://github.com/BeatLeader/beatleader-qmod/releases) or [ScoreSaber](https://scoresaber.com/quest). All you have to do is play any level with either installed. Replay will add a replay button next to the play button for levels that have a replay.
