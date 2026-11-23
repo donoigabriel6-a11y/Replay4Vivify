@@ -13,17 +13,19 @@ namespace BSOR {
         std::string timestamp;
 
         std::string playerID;
-        std::string playerName;
-        std::string platform;
-
-        std::string trackingSytem;
-        std::string hmd;
-        std::string controller;
-
         std::string hash;
         std::string songName;
         std::string mapper;
         std::string difficulty;
+        std::string mode;
+        std::string environment;
+        std::string modifiers;
+        float jumpDistance = 0;
+        bool leftHanded = false;
+        float height = 0;
+        float startTime = 0;
+        float failTime = 0;
+        float speed = 0;
 
         int score;
         std::string mode;
@@ -114,13 +116,6 @@ static BSOR::Info ReadInfo(std::ifstream& input) {
     READ_STRING(info.timestamp);
 
     READ_STRING(info.playerID);
-    READ_UTF16(info.playerName);
-    READ_STRING(info.platform);
-
-    READ_STRING(info.trackingSytem);
-    READ_STRING(info.hmd);
-    READ_STRING(info.controller);
-
     READ_STRING(info.hash);
     READ_UTF16(info.songName);
     READ_UTF16(info.mapper);
