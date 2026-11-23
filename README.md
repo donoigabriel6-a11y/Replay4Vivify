@@ -1,6 +1,6 @@
-# Replay
+# Replay4Vivify
 
-Watch back your best scores!
+Watch back your best scores with vivify support!
 
 ## FAQ (Frequently Asked Questions)
 
