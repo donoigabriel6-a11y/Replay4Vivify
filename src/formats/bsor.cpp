@@ -9,16 +9,10 @@
 namespace BSOR {
     struct Info {
         std::string version;
-        std::string gameVersion;
-        std::string timestamp;
-
         std::string playerID;
         std::string hash;
         std::string songName;
         std::string mapper;
-        std::string difficulty;
-        std::string mode;
-        std::string environment;
         std::string modifiers;
         float jumpDistance = 0;
         bool leftHanded = false;
@@ -26,18 +20,7 @@ namespace BSOR {
         float startTime = 0;
         float failTime = 0;
         float speed = 0;
-
         int score;
-        std::string mode;
-        std::string environment;
-        std::string modifiers;
-        float jumpDistance = 0;
-        bool leftHanded = false;
-        float height = 0;
-
-        float startTime = 0;
-        float failTime = 0;
-        float speed = 0;
     };
 
 #pragma pack(1)
