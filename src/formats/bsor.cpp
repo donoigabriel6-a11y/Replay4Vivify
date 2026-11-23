@@ -95,19 +95,13 @@ static Replay::Modifiers ParseModifierString(std::string const& modifiers) {
 static BSOR::Info ReadInfo(std::ifstream& input) {
     BSOR::Info info;
     READ_STRING(info.version);
-    READ_STRING(info.gameVersion);
-    READ_STRING(info.timestamp);
-
     READ_STRING(info.playerID);
     READ_STRING(info.hash);
     READ_UTF16(info.songName);
     READ_UTF16(info.mapper);
-    READ_STRING(info.difficulty);
+    READ_STRING(info.modifiers);
 
     READ_TO(info.score);
-    READ_STRING(info.mode);
-    READ_STRING(info.environment);
-    READ_STRING(info.modifiers);
     READ_TO(info.jumpDistance);
     READ_TO(info.leftHanded);
     READ_TO(info.height);
@@ -122,11 +116,9 @@ static BSOR::Info ParseInfo(std::ifstream& input, Replay::Data& replay, bool pra
     auto info = ReadInfo(input);
     replay.info.modifiers = ParseModifierString(info.modifiers);
     replay.info.modifiers.leftHanded = info.leftHanded;
-    replay.info.timestamp = std::stol(info.timestamp);
     replay.info.score = info.score;
     replay.info.source = "BeatLeader";
     replay.info.positionsAreLocal = true;
-    replay.info.playerName.emplace(info.playerName);
 
     static auto getPlayerId = CondDeps::Find<std::optional<std::string>>("bl", "LoggedInPlayerId");
     static auto getPlayerQuestId = CondDeps::Find<std::optional<std::string>>("bl", "LoggedInPlayerQuestId");
