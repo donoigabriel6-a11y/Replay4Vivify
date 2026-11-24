@@ -21,6 +21,12 @@ namespace BSOR {
         float failTime = 0;
         float speed = 0;
         int score;
+        // Fields read from BSOR but not stored in replay (size optimization)
+        std::string gameVersion;
+        std::string timestamp;
+        std::string difficulty;
+        std::string mode;
+        std::string environment;
     };
 
 #pragma pack(1)
@@ -95,13 +101,19 @@ static Replay::Modifiers ParseModifierString(std::string const& modifiers) {
 static BSOR::Info ReadInfo(std::ifstream& input) {
     BSOR::Info info;
     READ_STRING(info.version);
+    READ_STRING(info.gameVersion);
+    READ_STRING(info.timestamp);
+
     READ_STRING(info.playerID);
     READ_STRING(info.hash);
     READ_UTF16(info.songName);
     READ_UTF16(info.mapper);
-    READ_STRING(info.modifiers);
+    READ_STRING(info.difficulty);
 
     READ_TO(info.score);
+    READ_STRING(info.mode);
+    READ_STRING(info.environment);
+    READ_STRING(info.modifiers);
     READ_TO(info.jumpDistance);
     READ_TO(info.leftHanded);
     READ_TO(info.height);
@@ -430,7 +442,8 @@ std::shared_ptr<Replay::Data> Parsing::ReadBSOR(std::string const& path) {
     replay->events.emplace();
 
     auto flags = GetFilenameFlags(std::filesystem::path(path).filename());
-    auto info = ParseInfo(input, *replay, flags.contains("practice"), flags.contains("fail"));
+    auto info = ReadInfo(input);
+    ParseInfo(input, *replay, flags.contains("practice"), flags.contains("fail"));
 
     replay->events->hasOldScoringTypes = Utils::LowerVersion(info.gameVersion, "1.40");
     replay->events->hasBombCutInfo = false;
