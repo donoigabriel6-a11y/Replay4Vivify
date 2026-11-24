@@ -301,33 +301,26 @@ static void ParseWalls(std::ifstream& input, Replay::Data& replay, BSOR::Info co
         if (replay.info.modifiers.fourLives || replay.info.modifiers.oneLife)
             continue;
 
+        // we don't care about energy or end time in this case
+        // theoretically we should use end time to keep playerHeadIsInObstacle accurate, but since the PC version
+        // records end energy instead of end time, it's not possible to know the end time on those replays in this case
+        if (replay.info.modifiers.fourLives || replay.info.modifiers.oneLife)
+            continue;
+
         // "oculus" means standalone - PC is either "steam" or "oculuspc"
-        if (info.platform == "oculus") {
-            wall.endTime = wallEvent.energy;
-            // should be in order, but doesn't hurt to check
-            if (wall.time > latestWallTime)
-                latestWallTime = wall.time;
-        } else {
-            // process all note events up to event time
-            while (note != notes.end() && note->time < wallEvent.time) {
-                energy += Utils::EnergyForNote(note->info, replay.events->hasOldScoringTypes);
-                if (energy > 1)
-                    energy = 1;
-                note++;
-            }
-            float diff = energy - wallEvent.energy;
-            // this should never happen
-            if (diff < 0)
-                diff = 0;
-            float seconds = diff / 1.3;
-            wall.endTime = wallEvent.time + seconds;
-            // now we also correct for any cuts that happen during the wall...
-            while (note != notes.end() && note->time < wall.endTime) {
-                wall.endTime += Utils::EnergyForNote(note->info, replay.events->hasOldScoringTypes) / 1.3;
-                note++;
-            }
-            energy = wallEvent.energy;
+        // Removed platform check as the field was removed for size optimization.
+        float diff = energy - wallEvent.energy;
+        // this should never happen
+        if (diff < 0)
+            diff = 0;
+        float seconds = diff / 1.3;
+        wall.endTime = wallEvent.time + seconds;
+        // now we also correct for any cuts that happen during the wall...
+        while (note != notes.end() && note->time < wall.endTime) {
+            wall.endTime += Utils::EnergyForNote(note->info, replay.events->hasOldScoringTypes) / 1.3;
+            note++;
         }
+        energy = wallEvent.energy;
     }
 
     // replays on yet another BL version just forgot to record wall event end times

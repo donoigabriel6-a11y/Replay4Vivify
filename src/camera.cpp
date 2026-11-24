@@ -142,7 +142,8 @@ static void SetupRecording() {
     customCamera->backgroundColor = mainCamera->backgroundColor;
     customCamera->hideFlags = mainCamera->hideFlags;
     customCamera->depthTextureMode = mainCamera->depthTextureMode;
-    customCamera->cullingMask = mainCamera->cullingMask;
+    // Use a full game culling mask for recording (exclude only UI layer 5)
+    customCamera->cullingMask = ~(1 << 5);
     // Makes the camera render before the main
     customCamera->depth = mainCamera->depth - 1;
 
