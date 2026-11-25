@@ -56,11 +56,24 @@ jobs:
           cd ./build/
           pattern="lib${module_id}*.so"
           files=( $pattern )
-          echo ::set-output name=NAME::"${files[0]}"
+          echo "NAME=${files[0]}" >> $GITHUB_OUTPUT
 
-      - name: Rename debug
+      - name: Prepare debug library
         run: |
-          mv ./build/debug/${{ steps.libname.outputs.NAME }} ./build/debug/debug_${{ steps.libname.outputs.NAME }}
+          # Debug lib is moved to ./build/debug/ by CMake POST_BUILD commands
+          # Release lib stays in ./build/
+          # We need to rename debug lib to debug_<name> for upload
+          if [ -f "./build/debug/${{ steps.libname.outputs.NAME }}" ]; then
+            mv "./build/debug/${{ steps.libname.outputs.NAME }}" "./build/debug/debug_${{ steps.libname.outputs.NAME }}"
+          elif [ -f "./build/${{ steps.libname.outputs.NAME }}" ]; then
+            # If not in debug folder, copy from build folder
+            cp "./build/${{ steps.libname.outputs.NAME }}" "./build/debug/debug_${{ steps.libname.outputs.NAME }}"
+          else
+            echo "Debug library not found!"
+            ls -la ./build/
+            ls -la ./build/debug/ 2>/dev/null || echo "debug folder not found"
+            exit 1
+          fi
 
       - name: Upload non-debug artifact
         uses: actions/upload-artifact@v4
