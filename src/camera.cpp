@@ -97,15 +97,15 @@ static void SetGraphicsSettings() {
     }
     settings.quality.antiAliasingLevel = antiAlias;
 
-    // Quest optimization: reduced wall quality
+    // Quest optimization: reduced wall quality - disable bloom via mainEffect
     if (questOptimized && getConfig().ReducedWallQuality.GetValue()) {
-        settings.quality.bloom = BeatSaber::Settings::QualitySettings::BloomQuality::Off;
+        settings.quality.bloom = BeatSaber::Settings::QualitySettings::BloomQuality::Low;
+        settings.quality.mainEffect = BeatSaber::Settings::QualitySettings::MainEffectOption::Off;
     } else {
         settings.quality.bloom = BeatSaber::Settings::QualitySettings::BloomQuality::Game;
+        settings.quality.mainEffect = getConfig().Bloom.GetValue() ? BeatSaber::Settings::QualitySettings::MainEffectOption::Game
+                                                                   : BeatSaber::Settings::QualitySettings::MainEffectOption::Off;
     }
-
-    settings.quality.mainEffect = getConfig().Bloom.GetValue() ? BeatSaber::Settings::QualitySettings::MainEffectOption::Game
-                                                               : BeatSaber::Settings::QualitySettings::MainEffectOption::Off;
     settings.quality.mirror = getConfig().Mirrors.GetValue();
 
     applicator->ApplyGraphicSettings(settings, GlobalNamespace::SceneType::Game);
