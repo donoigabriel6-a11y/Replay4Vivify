@@ -24,9 +24,13 @@ Watch back your best scores with vivify support!
 
 # Credits
 
+[Metalit](https://github.com/Metalit) for making the actual replay mod
+
 [NSGolova](https://github.com/NSGolova) for making the BeatLeader format and recorder, buggy as it may be
 
 [Fern](https://github.com/Fernthedev) for the original version of Hollywood, the renderer
+
+[GRFN](https://github.com/donoigabriel6-a11y) me, for adding the vivify support
 
 [Sc2ad](https://github.com/Sc2ad) and the rest of the Quest modding people
 =======
