@@ -99,7 +99,7 @@ static void SetGraphicsSettings() {
 
     // Quest optimization: reduced wall quality - disable bloom via mainEffect
     if (questOptimized && getConfig().ReducedWallQuality.GetValue()) {
-        settings.quality.bloom = BeatSaber::Settings::QualitySettings::BloomQuality::Low;
+        settings.quality.bloom = BeatSaber::Settings::QualitySettings::BloomQuality::Game;
         settings.quality.mainEffect = BeatSaber::Settings::QualitySettings::MainEffectOption::Off;
     } else {
         settings.quality.bloom = BeatSaber::Settings::QualitySettings::BloomQuality::Game;
