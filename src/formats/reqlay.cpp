@@ -318,6 +318,12 @@ std::shared_ptr<Replay::Data> Parsing::ReadReqlay(std::string const& path) {
     replay->info.source = "Replay Mod (Legacy)";
     replay->info.positionsAreLocal = false;
 
+    // Vivify-Quest detection for Reqlay format
+    if (path.find("vivify") != std::string::npos || path.find("vivifyQuest") != std::string::npos) {
+        replay->info.vivifyQuest = true;
+        logger.info("Detected vivify-quest replay from filename: {}", path);
+    }
+
     bool hasRotation = path.find("Degree") != std::string::npos || path.find("degree") != std::string::npos;
     MetaCore::Engine::QuaternionAverage averageCalc(Quaternion::identity(), hasRotation);
 

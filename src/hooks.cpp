@@ -411,16 +411,24 @@ MAKE_AUTO_HOOK_MATCH(
     bool screenDisplacementEffects
 ) {
     if (Manager::Rendering()) {
-        switch (getConfig().Walls.GetValue()) {
-            case 1:
-                renderer->sharedMaterial = self->_texturedCoreMaterial;
-                break;
-            case 2:
-                renderer->sharedMaterial = self->_hwCoreMaterial;
-                break;
-            default:
-                renderer->sharedMaterial = self->_lwCoreMaterial;
-                break;
+        // Quest optimization: use lower quality walls
+        bool questOptimized = getConfig().QuestOptimizedRendering.GetValue();
+        bool reducedWallQuality = getConfig().ReducedWallQuality.GetValue();
+
+        if (questOptimized && reducedWallQuality) {
+            renderer->sharedMaterial = self->_lwCoreMaterial;  // Always use low quality
+        } else {
+            switch (getConfig().Walls.GetValue()) {
+                case 1:
+                    renderer->sharedMaterial = self->_texturedCoreMaterial;
+                    break;
+                case 2:
+                    renderer->sharedMaterial = self->_hwCoreMaterial;
+                    break;
+                default:
+                    renderer->sharedMaterial = self->_lwCoreMaterial;
+                    break;
+            }
         }
     } else
         ObstacleMaterialSetter_SetCoreMaterial(self, renderer, obstacleQuality, screenDisplacementEffects);
@@ -434,9 +442,17 @@ MAKE_AUTO_HOOK_MATCH(
     UnityEngine::Renderer* renderer,
     BeatSaber::Settings::QualitySettings::ObstacleQuality obstacleQuality
 ) {
-    if (Manager::Rendering())
-        renderer->sharedMaterial = getConfig().Walls.GetValue() == 0 ? self->_fakeGlowLWMaterial : self->_fakeGlowTexturedMaterial;
-    else
+    if (Manager::Rendering()) {
+        // Quest optimization: use lower quality fake glow
+        bool questOptimized = getConfig().QuestOptimizedRendering.GetValue();
+        bool reducedWallQuality = getConfig().ReducedWallQuality.GetValue();
+
+        if (questOptimized && reducedWallQuality) {
+            renderer->sharedMaterial = self->_fakeGlowLWMaterial;  // Always use low quality
+        } else {
+            renderer->sharedMaterial = getConfig().Walls.GetValue() == 0 ? self->_fakeGlowLWMaterial : self->_fakeGlowTexturedMaterial;
+        }
+    } else
         ObstacleMaterialSetter_SetFakeGlowMaterial(self, renderer, obstacleQuality);
 }
 

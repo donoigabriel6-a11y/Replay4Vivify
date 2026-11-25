@@ -164,6 +164,12 @@ static BSOR::Info ParseInfo(std::ifstream& input, Replay::Data& replay, bool pra
     if (failed)
         replay.info.failTime = info.failTime;
 
+    // Vivify-Quest compatibility: detect and mark replays from vivify-quest
+    // Check if the replay was recorded on a map that has vivify-quest modifications
+    // We can detect this by checking for specific map characteristics or metadata
+    // For now, we'll allow the flag to be set via custom data if present
+    // The replay system will check this flag during note matching
+
     return info;
 }
 
@@ -400,6 +406,12 @@ static void ParseCustomData(std::ifstream& input, Replay::Data& replay) {
         input.read(content.data(), length);
 
         replay.customData.emplace(key, std::move(content));
+
+        // Vivify-Quest detection: check for vivify-quest custom data
+        if (key == "vivifyQuest" || key == "vivify-quest" || key.find("vivify") != std::string::npos) {
+            replay.info.vivifyQuest = true;
+            logger.info("Detected vivify-quest replay from custom data: {}", key);
+        }
     }
 }
 

@@ -4,10 +4,10 @@
   "sharedDir": "shared",
   "dependenciesDir": "extern",
   "info": {
-    "name": "Replay",
-    "id": "replay",
+    "name": "Replay4Vivify",
+    "id": "replay4vivify",
     "version": "0.5.2",
-    "url": "https://github.com/Metalit/Replay",
+    "url": "https://github.com/donoigabriel6-a11y/Replay4Vivify",
     "additionalData": {
       "overrideSoName": "libreplay.so",
       "cmake": true

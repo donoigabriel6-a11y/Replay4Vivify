@@ -451,6 +451,12 @@ std::shared_ptr<Replay::Data> Parsing::ReadScoresaber(std::string const& path) {
     info.positionsAreLocal = false;
     replay->events->cutInfoMissingOKs = true;
 
+    // Vivify-Quest detection for ScoreSaber format
+    if (path.find("vivify") != std::string::npos || path.find("vivifyQuest") != std::string::npos) {
+        replay->info.vivifyQuest = true;
+        logger.info("Detected vivify-quest replay from filename: {}", path);
+    }
+
     replay->info.hash = GetFullHash(input);
 
     PreProcess(*replay);
