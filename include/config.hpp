@@ -72,6 +72,13 @@ DECLARE_CONFIG(Config) {
     CONFIG_VALUE(Pauses, bool, "Allow Pauses", false, "Whether to allow the game to pause while rendering");
     CONFIG_VALUE(Ding, bool, "Ding", false, "Plays a sound when renders are finished");
 
+    // Quest/Vivify-Quest optimizations
+    CONFIG_VALUE(QuestOptimizedRendering, bool, "Quest Optimized Rendering", true, "Enable optimizations for Quest/Standalone (reduced quality, better performance)");
+    CONFIG_VALUE(MaxWallsPerFrame, int, "Max Walls Per Frame", 20, "Limit walls processed per frame for performance");
+    CONFIG_VALUE(DisableParticles, bool, "Disable Particles", false, "Disable particle effects for performance");
+    CONFIG_VALUE(ReducedWallQuality, bool, "Reduced Wall Quality", true, "Use lower quality wall materials on Quest");
+    CONFIG_VALUE(FrameSkipRender, int, "Frame Skip Render", 0, "Render every Nth frame only (0 = every frame)");
+
     CONFIG_VALUE(TimeButton, ButtonPair, "Skip Forward|Skip Backward", {}, "Skips around in the time while watching a replay");
     CONFIG_VALUE(TimeSkip, int, "Time Skip Amount", 5, "Number of seconds to skip per button press");
     CONFIG_VALUE(SpeedButton, ButtonPair, "Speed Up|Slow Down", {}, "Changes playback speed while watching a replay");

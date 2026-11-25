@@ -58,11 +58,20 @@ std::fstream videoOutput;
 static void SetGraphicsSettings() {
     auto applicator = UnityEngine::Resources::FindObjectsOfTypeAll<GlobalNamespace::SettingsApplicatorSO*>()->First();
     auto settings = BeatSaber::Settings::Settings();
-    settings.quality.vrResolutionScale = 0.8;
 
-    // unchanged
-    settings.quality.renderViewportScale = 1;
-    settings.quality.maxQueuedFrames = -1;
+    // Quest/Vivify-Quest optimizations
+    bool questOptimized = getConfig().QuestOptimizedRendering.GetValue();
+
+    if (questOptimized) {
+        settings.quality.vrResolutionScale = 0.6;
+        settings.quality.renderViewportScale = 0.8;
+        settings.quality.maxQueuedFrames = 1;
+    } else {
+        settings.quality.vrResolutionScale = 0.8;
+        settings.quality.renderViewportScale = 1;
+        settings.quality.maxQueuedFrames = -1;
+    }
+
     settings.quality.vSyncCount = 0;
     settings.quality.targetFramerate = UnityEngine::Application::get_targetFrameRate();
 
@@ -79,22 +88,28 @@ static void SetGraphicsSettings() {
                 antiAlias = 2;
                 break;
             case 2:
-                antiAlias = 4;
+                antiAlias = questOptimized ? 2 : 4;  // Lower AA on Quest
                 break;
             case 3:
-                antiAlias = 8;
+                antiAlias = questOptimized ? 4 : 8;  // Lower AA on Quest
                 break;
         }
     }
     settings.quality.antiAliasingLevel = antiAlias;
 
-    settings.quality.bloom = BeatSaber::Settings::QualitySettings::BloomQuality::Game;
+    // Quest optimization: reduced wall quality
+    if (questOptimized && getConfig().ReducedWallQuality.GetValue()) {
+        settings.quality.bloom = BeatSaber::Settings::QualitySettings::BloomQuality::Off;
+    } else {
+        settings.quality.bloom = BeatSaber::Settings::QualitySettings::BloomQuality::Game;
+    }
+
     settings.quality.mainEffect = getConfig().Bloom.GetValue() ? BeatSaber::Settings::QualitySettings::MainEffectOption::Game
                                                                : BeatSaber::Settings::QualitySettings::MainEffectOption::Off;
     settings.quality.mirror = getConfig().Mirrors.GetValue();
 
     applicator->ApplyGraphicSettings(settings, GlobalNamespace::SceneType::Game);
-    logger.info("applied custom graphics settings");
+    logger.info("applied custom graphics settings (Quest optimized: {})", questOptimized);
 }
 
 static void UnsetGraphicsSettings() {
@@ -435,9 +450,22 @@ static void UpdateDSPOffset(GlobalNamespace::AudioTimeSyncController* self) {
     self->_dspTimeOffset = UnityEngine::AudioSettings::get_dspTime() - time / self->_timeScale - self->_inBetweenDSPBufferingTimeEstimate;
 }
 
+static int frameSkipCounter = 0;
+
 bool Camera::UpdateTime(GlobalNamespace::AudioTimeSyncController* controller) {
     if (!videoCapture || !Manager::Rendering() || Manager::Paused())
         return true;
+
+    // Quest optimization: frame skip rendering
+    int frameSkip = getConfig().FrameSkipRender.GetValue();
+    if (frameSkip > 0) {
+        frameSkipCounter++;
+        if (frameSkipCounter < frameSkip) {
+            return true; // Skip this frame
+        }
+        frameSkipCounter = 0;
+    }
+
     UpdateDSPOffset(controller);
     float time = std::max(controller->_songTime, videoCapture->GetRenderTime() * controller->_timeScale);
     controller->_lastFrameDeltaSongTime = time - controller->_songTime;

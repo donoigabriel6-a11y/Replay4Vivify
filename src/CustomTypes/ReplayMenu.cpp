@@ -231,6 +231,18 @@ void Replay::MenuView::UpdateUI(bool getData) {
     levelBar->Setup(level, beatmap.difficulty, beatmap.beatmapCharacteristic);
     float songLength = level->songDuration;
 
+    // Ensure render button is always visible and interactable for valid replays
+    if (renderButton) {
+        renderButton->gameObject->SetActive(true);
+        bool canInteract = levelView && (levelView->actionButton->interactable || levelView->practiceButton->interactable);
+        renderButton->interactable = canInteract;
+    }
+    if (watchButton) {
+        watchButton->gameObject->SetActive(true);
+        bool canInteract = levelView && (levelView->actionButton->interactable || levelView->practiceButton->interactable);
+        watchButton->interactable = canInteract;
+    }
+
     auto& info = Manager::GetCurrentInfo();
     Parsing::CheckForQuit(info, songLength);
 

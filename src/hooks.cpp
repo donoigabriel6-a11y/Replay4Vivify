@@ -457,13 +457,27 @@ MAKE_AUTO_HOOK_MATCH(ConditionalActivation_Awake, &ConditionalActivation::Awake,
 MAKE_AUTO_HOOK_MATCH(ShockwaveEffect_Start, &ShockwaveEffect::Start, void, ShockwaveEffect* self) {
     ShockwaveEffect_Start(self);
 
-    if (Manager::Rendering())
-        self->_shockwavePS->main.maxParticles = getConfig().ShockwavesOn.GetValue() ? getConfig().Shockwaves.GetValue() : 0;
+    if (Manager::Rendering()) {
+        int maxParticles = 0;
+        if (getConfig().ShockwavesOn.GetValue() && getConfig().Shockwaves.GetValue() > 0) {
+            maxParticles = getConfig().Shockwaves.GetValue();
+            // Quest optimization: limit particles
+            if (getConfig().QuestOptimizedRendering.GetValue() && getConfig().DisableParticles.GetValue()) {
+                maxParticles = 0;
+            }
+        }
+        self->_shockwavePS->main.maxParticles = maxParticles;
+    }
 }
 
 // I think graphics tweaks is what unnecessarily disables the component in addition to the game object
 MAKE_AUTO_HOOK_MATCH(ShockwaveEffect_SpawnShockwave, &ShockwaveEffect::SpawnShockwave, void, ShockwaveEffect* self, UnityEngine::Vector3 pos) {
-    if (getConfig().ShockwavesOn.GetValue() && getConfig().Shockwaves.GetValue() > 0) {
+    bool shouldEnable = getConfig().ShockwavesOn.GetValue() && getConfig().Shockwaves.GetValue() > 0;
+    // Quest optimization: disable particles if configured
+    if (getConfig().QuestOptimizedRendering.GetValue() && getConfig().DisableParticles.GetValue()) {
+        shouldEnable = false;
+    }
+    if (shouldEnable) {
         self->gameObject->active = true;
         self->enabled = true;
     }
