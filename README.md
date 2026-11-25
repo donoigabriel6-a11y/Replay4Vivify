@@ -1,4 +1,4 @@
-# Replay4Vivify
+# Replay4Vivify [Discord](https://discord.gg/BzjvddRcbn)
 
 Watch back your best scores with vivify support!
 
