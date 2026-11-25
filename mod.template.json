@@ -12,7 +12,7 @@
   "coverImage": "cover.png",
   "dependencies": [],
   "lateModFiles": [
-    "${binary}"
+    "libreplay4vivify.so"
   ],
   "libraryFiles": [],
   "fileCopies": []
