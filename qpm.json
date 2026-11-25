@@ -8,6 +8,7 @@
     "id": "replay4vivify",
     "version": "0.5.2",
     "url": "https://github.com/donoigabriel6-a11y/Replay4Vivify",
+    "author": "GRFN",
     "additionalData": {
       "overrideSoName": "libreplay.so",
       "cmake": true
