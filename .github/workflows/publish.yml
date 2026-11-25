@@ -1,8 +1,8 @@
 name: Publish
 
 env:
-  module_id: replay
-  qmodName: Replay
+  module_id: replay4vivify
+  qmodName: Replay4Vivify
 
 on:
   workflow_dispatch:
